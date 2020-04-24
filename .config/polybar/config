@@ -1,0 +1,603 @@
+##########################################################
+#################### ~~~Variables~~~ #####################
+##########################################################
+
+[colors]
+##### Manual #####
+#background = #15131E
+background = #9C000000
+background-alt = #444
+foreground = #962d4c
+foreground-alt = #555
+
+alert = #962d4c
+
+trans = #CC292b2e
+white = #eee
+grey = #444444
+pink = #d56c89
+blue = #4f97d7
+purple = #875faf
+green = #20ad80
+red = #ee3333
+orange = #DFAA30
+
+##### XRDB #####
+bar_bg = ${xrdb:color0}
+bar_fg = ${xrdb:color1}
+fg = ${xrdb:color1}
+fg_alt = ${xrdb:color2}
+bg = ${xrdb:color2}
+bg_alt = ${xrdb:color2}
+text_primary = ${xrdb:color5}
+text_secondary=${xrdb:color6}
+icons_primary = ${xrdb:color7}
+icons_secondary =${xrdb:color8}
+
+[values]
+height = 34
+rad = 0
+offY = -3
+monitor_edp = ${xrdb:edp}
+monitor_hdmi = ${xrdb:hdmi}
+
+##########################################################
+###################### ~~~Bars~~~ ########################
+##########################################################
+
+##### Main Bar #####
+[bar/main]
+monitor = ${values.monitor_edp}
+width = 100%
+height = ${values.height}
+offset-x = 0%
+offset-y = ${values.offY}
+radius-top = ${values.rad}
+radius-bottom = ${values.rad}
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.bar_fg}
+line-size = 3
+line-color = #f00
+border-size = 0
+border-color = #000000
+padding-left = 2
+padding-right = 3
+module-margin-left = 0
+module-margin-right = 2
+
+
+# Main Font
+font-0 = Fira Code Retina:style=Regular:pixelsize=12;6
+
+# Seconday Font
+font-1 = Hack Nerd Font:style=Italic:pixelsize=12;4
+
+modules-center = i3 spacer date spacer time spacer
+modules-left = eth wlan ping spacer
+modules-right = spacer pulseaudio spacer battery spacer temperature spacer
+
+tray-position = right
+tray-background = ${colors.background}
+
+enable-ipc = true
+
+wm-restack = i3
+override-redirect = true
+cursor-click = pointer
+cursor-scroll = ns-resize
+
+##########################################################
+################## ~~~Internal Modules~~~ ################
+##########################################################
+
+[settings]
+screenchange-reload = true
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+#############################
+######### xkeyboard #########
+#############################
+[module/xkeyboard]
+type = internal/xkeyboard
+blacklist-0 = num lock
+
+format-prefix = " KEY "
+format-prefix-font = 0
+format-prefix-foreground = ${colors.blue}
+format-prefix-background = ${colors.background}
+
+label-layout = %layout%
+label-layout-font = main
+label-layout-foreground = ${colors.blue}
+label-layout-background = ${colors.background}
+
+; label-indicator-padding = 2
+; label-indicator-margin = 1
+; label-indicator-background = ${colors.blue}
+; label-indicator-underline = ${colors.blue}
+
+#############################
+######### filesystem ########
+#############################
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+label-mounted = %{F#0a81f5}%mountpoint%%{F-}: %percentage_used%%
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.foreground-alt}
+
+#############################
+########## i3index ##########
+#############################
+[module/i3index]
+type = internal/i3
+format = <label-state>
+
+strip-wsnumbers = true
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-focused = "%index% "
+label-focused-foreground = ${colors.bar_fg}
+label-focused-background = ${colors.bar_bg}
+
+pin-workspaces = true
+
+label-unfocused =
+label-urgent =
+
+#############################
+############# i3 ############
+#############################
+[module/i3]
+type = internal/i3
+
+strip-wsnumbers = true
+index-sort = true
+enable-click = true
+enable-scroll = true
+wrapping-scroll = true
+
+# Only show workspaces on the same output as the bar
+pin-workspaces = true
+
+# ws-icon-[0-9]+ = <label>;<icon>
+# NOTE: The <label> needs to match the name of the i3 workspace
+# Neither <label> nor <icon> can contain a semicolon (;)
+#ws-icon-0 = "0:hdmi;"
+#ws-icon-1 = "1:main;﵀"
+#ws-icon-2 = "2:seconday;突"
+#ws-icon-3 = "3:tertiary;ﳴ"
+#ws-icon-4 = "4:comm;"
+#ws-icon-5 = "5:mail;"
+#ws-icon-6 = "6:games;"
+#ws-icon-7 = "7:media;"
+#ws-icon-8 = "8:other;"
+#ws-icon-9 = "9:moar;"
+#ws-icon-10 = "10:dp;"
+#ws-icon-default = 
+
+# Available tags:
+#   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
+#   <label-mode> (default)
+format = <label-state> <label-mode>
+
+label-mode = "%mode%"
+label-mode-foreground = ${colors.pink}
+label-mode-background = ${colors.background}
+
+# focused = Active workspace on focused monitor
+label-focused = " "
+#label-focused = " %icon% "
+label-focused-foreground = ${colors.purple}
+label-focused-background = ${colors.background}
+
+# unfocused = Inactive workspace on any monitor
+label-unfocused = " "
+#label-unfocused = " %icon% "
+label-unfocused-foreground = ${colors.pink}
+label-unfocused-background = ${colors.background}
+
+# Available tokens:
+#   %name%
+#   %icon%
+#   %index%
+#   %output%
+# Default: %icon%  %name%
+label-visible =
+label-visible-underline =
+label-visible-padding = 0
+label-visible-foreground = ${colors.pink}
+
+# urgent = Workspace with urgency hint set
+label-urgent = "  "
+#label-urgent = " %icon% "
+label-urgent-foreground = ${colors.red}
+label-urgent-background = ${colors.background}
+
+#############################
+############ cpu ############
+#############################
+[module/cpu]
+type = internal/cpu
+interval = 1
+
+; Available tags:
+;   <label> (default)
+;   <bar-load>
+;   <ramp-load>
+;   <ramp-coreload>
+
+format = <label>
+format-prefix =" "
+format-prefix-foreground = ${colors.fg_alt}
+
+; Available tokens:
+;   %percentage% (default) - total cpu load
+;   %percentage-cores% - load percentage for each core
+;   %percentage-core[1-9]% - load percentage for specific core
+label-prefix = test
+label = %percentage%%
+
+#############################
+########### memory ##########
+#############################
+[module/memory]
+type = internal/memory
+interval = 3
+
+format = <label>
+format-prefix = " "
+format-prefix-foreground = ${colors.fg_alt}
+
+label = %percentage_used%%
+
+#############################
+########### wlan ############
+#############################
+[module/wlan]
+type = internal/network
+interface = wlo1
+interval = 3.0
+
+# Available tokens:
+#   %ifname%    [wireless+wired]
+#   %local_ip%  [wireless+wired]
+#   %local_ip6% [wireless+wired]
+#   %essid%     [wireless]
+#   %signal%    [wireless]
+#   %upspeed%   [wireless+wired]
+#   %downspeed% [wireless+wired]
+#   %linkspeed% [wired]
+# Default: %ifname% %local_ip%
+label-connected =%essid%(%downspeed%)
+label-connected-foreground = ${colors.purple}
+
+label-disconnected = 睊
+label-disconnected-foreground = ${colors.alert}
+
+# Available tags:
+#   <label-connected> (default)
+#   <ramp-signal>
+format-connected = <label-connected>
+format-connected-overline =
+#format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.purple}
+
+format-disconnected = <label-disconnected>
+format-disconnected-overline = ${self.format-connected-overline}
+
+#▂▄▆_
+#▂▄__
+#▂___
+ramp-signal-0 = "▂___"
+ramp-signal-1 = "▂▄__"
+ramp-signal-2 = "▂▄▆"
+ramp-signal-foreground = ${colors.foreground-alt}
+
+#############################
+############ eth ############
+#############################
+[module/eth]
+type = internal/network
+interface = enp60s0
+interval = 3.0
+
+format-connected-underline =
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.purple}
+label-connected = %local_ip%(%linkspeed%)
+
+format-disconnected = 
+format-disconnected-foreground = ${colors.fg_alt}
+;format-disconnected = <label-disconnected>
+;format-disconnected-underline = ${self.format-connected-underline}
+;label-disconnected = %ifname% disconnected
+;label-disconnected-foreground = ${colors.foreground-alt}
+
+#############################
+########## volume ###########
+#############################
+[module/pulseaudio]
+type = internal/pulseaudio
+
+format-volume = <ramp-volume> <label-volume>
+label-volume = %percentage%%
+label-volume-foreground = ${colors.green}
+
+label-muted = 
+label-muted-margin = 2
+label-muted-foreground = ${colors.grey}
+
+ramp-volume-foreground = ${colors.green}
+ramp-volume-0 = 
+ramp-volume-1 = 
+ramp-volume-2 = 
+
+bar-volume-width = 9
+bar-volume-foreground-0 = #9d72dd
+bar-volume-gradient = false
+bar-volume-indicator = |
+bar-volume-indicator-font = 2
+bar-volume-fill = -
+bar-volume-fill-font = 2
+bar-volume-empty = -
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = #a9a9a9
+
+#############################
+######### backlight #########
+#############################
+[module/backlight]
+type = internal/xbacklight
+
+output= eDP-1-1
+
+enable-scroll = true
+format-foreground=${colors.green}
+format = LGHT <label>
+label = %percentage%%
+ramp-0 = 🌕
+ramp-1 = 🌔
+ramp-2 = 🌓
+ramp-3 = 🌒
+ramp-4 = 🌑
+
+; Use the following command to list available cards:
+; $ ls -1 /sys/class/backlight/
+#card = intel_backlight
+
+#############################
+########## battery ##########
+#############################
+[module/battery]
+poll-interval = 5
+type = internal/battery
+battery = BAT1
+adapter = ADP1
+full-at = 95
+time-format = %H:%M
+
+format-charging = <animation-charging> <label-charging>
+format-charging-foreground = ${colors.blue}
+format-charging-background = ${colors.background}
+label-charging = "%percentage%%"
+label-charging-foreground = ${colors.blue}
+
+format-discharging = <ramp-capacity> <label-discharging>
+format-discharging-foreground = ${colors.blue}
+format-discharging-background = ${colors.background}
+label-discharging = "%percentage%%"
+label-discharging-foreground = ${colors.blue}
+
+format-full = <label-full>
+format-full-foreground = ${colors.blue}
+format-full-background = ${colors.background}
+label-full-prefix = "test"
+label-full = " %percentage%%"
+
+ramp-capacity-0 = 
+ramp-capacity-1 = 
+ramp-capacity-2 = 
+ramp-capacity-3 = 
+ramp-capacity-4 = 
+ramp-capacity-foreground = ${colors.bg}
+
+animation-charging-0 = 
+animation-charging-1 = 
+animation-charging-2 = 
+animation-charging-3 = 
+animation-charging-4 = 
+animation-charging-framerate = 500
+animation-charging-foreground = ${colors.blue}
+
+#############################
+######## temperature ########
+#############################
+[module/temperature]
+type = internal/temperature
+thermal-zone = 0
+warn-temperature = 80
+
+format = <label>
+format-prefix = " "
+format-prefix-font = 1
+format-prefix-foreground = ${colors.orange}
+
+format-warn = <label-warn>
+format-warn-prefix = " "
+format-warn-prefix-foreground = ${colors.white}
+
+label = %temperature-c%
+label-foreground = ${colors.orange}
+
+label-warn = %temperature-c%
+label-warn-foreground = ${colors.red}
+
+#ramp-0 =
+#ramp-1 = 
+#ramp-2 =
+#ramp-foreground = ${colors.foreground-alt}
+
+#############################
+############ date ###########
+#############################
+[module/date]
+type = internal/date
+interval = 5
+
+date =  %d-%h-%Y %A
+
+time =
+
+format-prefix = " "
+format-prefix-foreground = ${colors.fg_alt}
+format-overline =
+
+label = %date%
+label-foreground = ${colors.pink}
+
+#############################
+############ time ###########
+#############################
+[module/time]
+type = internal/date
+interval = 1
+
+time = %H:%M:%S
+
+label = %time%
+label-foreground = ${colors.pink}
+
+##########################################################
+################### ~~~Custom Modules~~~ #################
+##########################################################
+
+#############################
+########### Music ###########
+#############################
+[module/music]
+## Red/Pink color output is cmus, green color output is spotify
+type = custom/script
+exec = ~/.config/polybar/scripts/music_player.sh
+tail = true
+interval = 1
+
+## Input ##
+
+# Right click for previous song
+click-right = ~/.config/polybar/scripts/music_player.sh --prev
+
+# Left click for next song
+click-left = ~/.config/polybar/scripts/music_player.sh --next
+
+# Middle click for pause/play toggle
+click-middle = ~/.config/polybar/scripts/music_player.sh --play
+
+# Double click to toggle between spotify and cmus
+double-click-left = ~/.config/polybar/scripts/music_player.sh --toggle
+
+scroll-up = ~/.config/polybar/scripts/music_player.sh --vol_up
+scroll-down = ~/.config/polybar/scripts/music_player.sh --vol_down
+
+; Available tags:
+;   <output> - deprecated
+;   <label> (default)
+format = <label>
+format-prefix = "♪ "
+format-prefix-foreground = ${colors.fg_alt}
+
+# Available tokens:
+#   %output%
+# Default: %output%
+#label = %output:0:15:...%
+label = %output%
+
+#############################
+############ Ping ###########
+#############################
+[module/ping]
+type = custom/script
+exec = ~/.config/polybar/scripts/ping.sh
+tail = true
+
+format =<label>
+format-foreground = ${colors.purple}
+
+#############################
+######## Packet Loss ########
+#############################
+[module/packet]
+type = custom/script
+exec = ~/.config/polybar/scripts/packet_loss.sh
+interval = 5
+
+format =<label>
+format-foreground = ${colors.purple}
+
+#############################
+######### KDEConnect ########
+#############################
+[module/kdeconnect]
+type = custom/script
+exec = ~/.config/polybar/scripts/polybar-kdeconnect.sh show
+tail = true
+
+format = <label>
+format-foreground = ${colors.purple}
+
+#############################
+########### Timer ###########
+#############################
+[module/timer]
+type = custom/script
+exec = ~/.config/polybar/scripts/timer.sh
+tail = true
+
+click-left = ~/.config/polybar/scripts/timer.sh add 60
+click-middle = ~/.config/polybar/scripts/timer.sh add 300
+click-right = ~/.config/polybar/scripts/timer.sh reset
+
+format = <label>
+
+#############################
+########## Counter ##########
+#############################
+[module/counter]
+type = custom/script
+exec = ~/.config/polybar/scripts/magic_counter.sh
+interval = 1
+
+click-left = ~/.config/polybar/scripts/magic_counter.sh add
+
+format = <label>
+
+##########################################################
+#################### ~~~Font Modules~~~ ##################
+##########################################################
+
+##### Spacer #####
+[module/spacer]
+type = custom/text
+content = %{T3}   %{T-}
+content-foreground = ${colors.foreground}
+content-background = ${colors.background}
+
+##### Play symbol #####
+[module/play]
+type = custom/text
+content = %{T3}喇 %{T-}
+content-foreground = ${colors.pink}
+content-background = ${colors.trans}

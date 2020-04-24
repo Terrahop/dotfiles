@@ -1,0 +1,163 @@
+{
+  "layout": "splitv",
+  "percent": 0.5,
+  "type": "con",
+  "nodes": [
+    {
+      "border": "normal",
+      "floating": "auto_off",
+      "layout": "splith",
+      "percent": 0.526851851851852,
+      "type": "con",
+      "nodes": [
+        {
+          "border": "pixel",
+          "current_border_width": 2,
+          "floating": "auto_off",
+          "geometry": {
+            "height": 657,
+            "width": 632,
+            "x": 0,
+            "y": 0
+          },
+          "name": "zsh",
+          "percent": 0.609375,
+          "swallows": [
+            {
+              "class": "kitty",
+              "instance": "htop-container"
+            }
+          ],
+          "type": "con"
+        },
+        {
+          "border": "normal",
+          "floating": "auto_off",
+          "layout": "splitv",
+          "percent": 0.390625,
+          "type": "con",
+          "nodes": [
+            {
+              "border": "pixel",
+              "current_border_width": 2,
+              "floating": "auto_off",
+              "geometry": {
+                "height": 657,
+                "width": 632,
+                "x": 0,
+                "y": 0
+              },
+              "name": "zsh",
+              "percent": 0.498242530755712,
+              "swallows": [
+                {
+                  "class": "kitty",
+                  "instance": "ping-container"
+                }
+              ],
+              "type": "con"
+            },
+            {
+              "border": "pixel",
+              "current_border_width": 2,
+              "floating": "auto_off",
+              "geometry": {
+                "height": 657,
+                "width": 632,
+                "x": 0,
+                "y": 0
+              },
+              "name": "zsh",
+              "percent": 0.501757469244288,
+              "swallows": [
+                {
+                  "class": "kitty",
+                  "instance": "watch-container"
+                }
+              ],
+              "type": "con"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "border": "normal",
+      "floating": "auto_off",
+      "layout": "splith",
+      "percent": 0.473148148148148,
+      "type": "con",
+      "nodes": [
+        {
+          "border": "normal",
+          "floating": "auto_off",
+          "layout": "splitv",
+          "percent": 0.488541666666667,
+          "type": "con",
+          "nodes": [
+            {
+              "border": "pixel",
+              "current_border_width": 2,
+              "floating": "auto_off",
+              "geometry": {
+                "height": 657,
+                "width": 632,
+                "x": 0,
+                "y": 0
+              },
+              "name": "zsh",
+              "percent": 0.449119373776908,
+              "swallows": [
+                {
+                  "class": "kitty",
+                  "instance": "nethogs-container"
+                }
+              ],
+              "type": "con"
+            },
+            {
+              "border": "pixel",
+              "current_border_width": 2,
+              "floating": "auto_off",
+              "geometry": {
+                "height": 657,
+                "width": 632,
+                "x": 0,
+                "y": 0
+              },
+              "name": "zsh",
+              "percent": 0.550880626223092,
+              "swallows": [
+                {
+                  "class": "kitty",
+                  "instance": "nethogs-total-container"
+                }
+              ],
+              "type": "con"
+            }
+          ]
+        },
+        {
+          "border": "pixel",
+          "current_border_width": 2,
+          "floating": "auto_off",
+          "geometry": {
+            "height": 657,
+            "width": 632,
+            "x": 0,
+            "y": 0
+          },
+          "name": "cmus v2.8.0",
+          "percent": 0.511458333333333,
+          "swallows": [
+            {
+              "class": "kitty",
+              "instance": "cmus-container"
+            }
+          ],
+          "type": "con"
+        }
+      ]
+    }
+  ]
+}

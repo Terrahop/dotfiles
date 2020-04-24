@@ -1,0 +1,118 @@
+!!!!!!!!!
+! URxvt !
+!!!!!!!!!
+
+! Colors
+URxvt*background: [100]#000000
+URxvt*cursorColor: #9f3ecf
+URxvt*depth: 32
+URxvt*intensityStyles: false
+Urxvt*dynamicColors: on
+URxvt*termName: rxvt-unicode-256color
+
+!URxvt.highlightColor:   #f0f0f0
+
+! Ctrl word jump
+URxvt.keysym.Control-Up:     \033[1;5A
+URxvt.keysym.Control-Down:   \033[1;5B
+URxvt.keysym.Control-Left:   \033[1;5D
+URxvt.keysym.Control-Right:  \033[1;5C
+
+! ISO
+URxvt.iso14755: true
+URxvt.iso14755_52: false
+
+! Font
+URxvt*font: xft:SauceCodePro Nerd Font Mono:style=italic:size=12
+URxvt.boldFont: xft:SauceCodePro Nerd Font Mono:Bold:size=11
+URxvt.italicFont: xft:SauceCodePro Nerd Font Mono:Italic:size=11
+URxvt.boldItalicFont: xft:SauceCodePro Nerd Font Mono:BoldItalic:size=11
+URxvt.lineSpace: 0
+URxvt.letterSpace: 0
+URxvt.allow_bold:true
+URxvt*skipBuiltinGlyphs:true
+
+! UI
+URxvt*borderless: true
+URxvt*internalBorder: 4
+URxvt*scrollBar: false
+URxvt*saveLines: 20000
+URxvt*dynamicColors: true
+URxvt*fading: 10
+URxvt*cursorBlink: 1
+URxvt*cursorUnderline: 1
+
+! do not scroll with output
+URxvt*scrollTtyOutput: false
+
+! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt*scrollWithBuffer: true
+
+! scroll back to the bottom on keypress
+URxvt*scrollTtyKeypress: true
+
+! Disable scrollback buffer in secondary screens
+URxvt*secondaryScreen: 1
+URxvt*secondaryScroll: 0
+
+! Bindings
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+
+!!!!!!!!!
+! Color !
+!!!!!!!!!
+
+! special
+*.foreground:   #9f3ecf
+*.background:   #181b20
+*.cursorColor:  #9f3ecf
+
+! black
+*.color0:       #000000
+*.color8:       #4d4d4d
+
+! red
+*.color1:       #a512de
+*.color9:       #e30e70
+
+! green
+*.color2:       #5e31da
+*.color10:      #5e31da
+
+! yellow
+*.color3:       #620bd8
+*.color11:      #884cd8
+
+! blue
+*.color4:       #5200d1
+*.color12:      #5200d1
+
+! magenta
+*.color5:       #cb1ed1
+*.color13:      #fd28ff
+
+! cyan
+*.color6:       #ee32e9
+*.color14:      #1498ff
+
+! white
+*.color7:       #c23ec5
+*.color15:      #8752bb
+
+
+!!!!!!!!!
+! Extra !
+!!!!!!!!!
+
+! hdmi name
+*.hdmi:  HDMI-0
+
+! edp name
+*.edp:  eDP-1-1
+
+! dp name
+*.dp:  eDP-1-1
+
+! Polybar music player mode
+*.mode:  c
