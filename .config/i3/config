@@ -1,17 +1,26 @@
-## Requirements for everything
+##########################################################
+#
+# i3-gaps Configuration
+#
+##########################################################
+
+# Requirements
 # i3: i3-gaps-rounded-git (AUR)
-# Lock Screen: i3lock-color
-# App Launcher: rofi + rofi-calc + rofi-emoji
+# Lock Screen: dm-tool
+# App Launcher: rofi + rofi-calc
 # Screenshots: scrot
 # Terminal: kitty
 # Wallpaper: nitrogen
 # Status Bar: polybar
-# compositor: picom (Tyrones Fork)
+# Compositor: picom (Tyrones Fork)
+# Notifications: deadd-notification-center
 # Connected monitor names set in ~/.Xresources, see ./setup.sh
 
-##########################################################
-################ ~~~Global/Shortcuts~~~ ##################
-##########################################################
+#########################
+#
+# Global/Shortcuts
+#
+#########################
 
 ## Global Mod ##
 set $mod Mod4
@@ -28,18 +37,18 @@ bindsym $mod+Shift+q kill
 ## Window Xkill command ##
 bindsym --release $mod+Shift+x exec xkill
 
+## Toggle Mic
+bindsym --release $mod+n exec --no-startup-id xdotool key 'Super_L+period' sleep 0.1 key 'ctrl+d' keyup ctrl sleep 0.2 key 'Super_L+slash'
+
 ## Rofi ##
 # Start Rofi to open app menu
-bindsym $mod+d exec --no-startup-id ~/.config/rofi/app_launcher/launcher.sh
+bindsym $mod+d exec --no-startup-id ~/.config/rofi/scripts/app_launcher.sh
 
 # Start rofi to download audio from url
 bindsym $mod+z exec --no-startup-id ~/.config/i3/scripts/audio-dl.sh
 
 # Start rofi to locate files
 bindsym $mod+m exec --no-startup-id ~/.config/rofi/scripts/locate.sh
-
-# Start Rofi to show emoji selector
-bindsym $mod+x exec --no-startup-id ~/.config/rofi/scripts/emoji.sh
 
 # Start rofi for calculator
 bindsym $mod+c exec --no-startup-id ~/.config/rofi/scripts/calculator.sh
@@ -50,6 +59,9 @@ bindsym --release $mod+s exec --no-startup-id ~/.config/rofi/scripts/bitwarden.s
 ## Take Screenshot ##
 bindsym --release $mod+p exec --no-startup-id ~/.config/i3/scripts/screenshot.sh
 
+## Toggle Deadd Notification Center  ##
+bindsym --release $mod+Tab exec --no-startup-id kill -s USR1 $(pidof deadd-notification-center)
+
 ## Setup monitors  ##
 bindsym $mod+Shift+n exec --no-startup-id ~/.config/i3/setup.sh
 
@@ -58,9 +70,11 @@ set_from_resource $screen_hdmi hdmi
 set_from_resource $screen_edp edp
 set_from_resource $screen_dp dp
 
-##########################################################
-################# ~~~Focus/Windows~~~ ####################
-##########################################################
+#########################
+#
+# Focus/Windows
+#
+#########################
 
 ## Change focus ##
 # Vim-like bindings
@@ -118,10 +132,14 @@ bindsym $mod+Shift+slash move scratchpad
 # If there are multiple scratchpad windows, this command cycles through them.
 bindsym $mod+slash scratchpad show
 
+# Show the meeting scratchpad
+bindsym $mod+period [title="Meet*"] scratchpad show
 
-##########################################################
-################### ~~~Workspaces~~~ #####################
-##########################################################
+########################
+#
+# Workspaces
+#
+########################
 
 ## Setup workspaces ##
 set $ws1 1:main
@@ -319,13 +337,16 @@ exec --no-startup-id pkill blueman; sleep 1; blueman-applet; blueman-tray
 exec --no-startup-id pkill nm-applet; sleep 1; nm-applet
 
 ## Dunst notifications
-exec --no-startup-id dunst
+exec --no-startup-id deadd-notification-center
 
 ## Kde-Connect
 exec --no-startup-id kdeconnect-indicator
 
 ## Gnome polkit authentication
 exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+## Gnome keyring daemon
+exec --no-startup-id /usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
 
 ## Touchpad tapping default enabled
 exec --no-startup-id xinput -set-prop $(xinput | \
