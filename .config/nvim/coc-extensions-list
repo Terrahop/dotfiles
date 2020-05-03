@@ -1,0 +1,16 @@
+coc-sh
+
+coc-rust-analyzer
+
+coc-json
+
+coc-markdownlint
+
+coc-highlight
+coc-actions
+coc-snippets
+
+coc-css
+coc-html
+coc-tsserver
+coc-eslint
