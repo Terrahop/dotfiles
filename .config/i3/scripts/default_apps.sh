@@ -3,6 +3,7 @@
 xdg-mime default nvim.desktop text/plain
 xdg-mime default nvim.desktop text/x-c
 xdg-mime default nvim.desktop inode/x-empty
+xdg-mime default nvim.desktop application/json
 xdg-mime default nvim.desktop empty
 xdg-mime default ranger.desktop inode/directory
 xdg-mime default firefox.desktop application/pdf

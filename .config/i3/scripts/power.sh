@@ -1,14 +1,17 @@
-########## Power Management ##########
-#
-# Requires: cpupower-gui, isw
+#!/bin/bash
+
+# Power Management
 #
 # Manage system power mode. Controlling cpu power state, msi fan curves and
-# intel turbo boost.
+# and intel speedboost.
+#
+# Requirements
+# Fan Control: isw
+#
 
-### Vars ###
-
-# Path to file where the current power profile will be stored
-POWER_PATH="$HOME/.cache/powerstate"
+#########################
+# Vars
+#########################
 
 # ISW powersave profile name
 ISW_PS_PROFILE="16Q2EMS1"
@@ -17,28 +20,10 @@ ISW_PF_PROFILE="16Q2EMS11"
 # ISW balanced profile name
 ISW_B_PROFILE="16Q2EMS12"
 
-if [ ! -f "$POWER_PATH" ]; then
-    touch $POWER_PATH;
-    echo "powersave" > $POWER_PATH
-fi
 
-### Functions ###
-
-function power_toggle() {
-  CURRENT_STATE=$(cat $POWER_PATH)
-
-  if [ "$CURRENT_STATE" == "powersave" ]; then
-    sudo isw -w "$ISW_PF_PROFILE";
-    sudo cpupower-gui -p
-    echo "performance" > $POWER_PATH
-  elif [ "$CURRENT_STATE" == "performance" ]; then
-    sudo isw -w "$ISW_PS_PROFILE"
-    sudo cpupower-gui -b
-    echo "powersave" > $POWER_PATH
-  else
-    echo "nothing"
-  fi
-}
+##########################
+# functions
+#########################
 
 function performance_toggles() {
   # Reduce vm writeback time
@@ -100,7 +85,10 @@ function to_balanced() {
   echo "balanced" > $POWER_PATH
 }
 
-### Finalize ###
+
+#########################
+# Finalize
+#########################
 
 case "$1" in
   "toggle")
