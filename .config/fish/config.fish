@@ -1,9 +1,11 @@
 # ~/.config/fish/config.fish
 
-##### ENV Vars ######
-
 ## Load Secrets
 source $HOME/.config/fish/secrets.fish
+
+#########################
+# Env
+#########################
 
 ## Defaults
 set -gx EDITOR "nvim"
@@ -20,6 +22,7 @@ set fish_greeting
 set -gx CARGO_HOME "$HOME/.config/cargo/"
 set -gx RUSTUP_HOME "$HOME/.config/rustup/"
 set -gx PATH "$HOME/.config/cargo/bin:$PATH"
+set -gx RUSTC_WRAPPER "$HOME/.config/cargo/bin/sccache"
 
 ## NodeJs, Nvm
 set -gx npm_config_devdir "/tmp/.gyp"
@@ -35,7 +38,6 @@ set -gx FZF_DEFAULT_OPTS "--height 40% --layout=reverse --border "
 
 ## Starship Prompt
 set -gx STARSHIP_CONFIG "$HOME/.config/fish/starship.toml"
-
 
 ##### Fisher #####
 
@@ -56,8 +58,9 @@ for file in $fisher_path/conf.d/*.fish
     source $file 2> /dev/null
 end
 
-
-##### Aliases #####
+#########################
+# Aliases
+#########################
 
 #alias sudo "sudo "
 function sudo; command sudo -E $argv; end
