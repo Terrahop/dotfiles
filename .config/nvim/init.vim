@@ -46,8 +46,20 @@ autocmd BufEnter * silent! lcd %:p:h
 " Prevent split windows resizing automatically
 set noequalalways
 
-" Better display for messages
-set cmdheight=1
+" Set update time
+set updatetime=300
+
+" Always show signcolumns
+set signcolumn=yes
+
+" Highlight all searches
+set hlsearch
+
+" When searching try to be smart about cases
+set smartcase
+
+" Makes search act like search in modern browsers
+set incsearch
 
 " Jump to the last position when reopening a file
 if has("autocmd")
@@ -56,29 +68,6 @@ endif
 
 "===========================================
 "====== Functions
-
-" Terminal Function
-let g:term_buf = 0
-let g:term_win = 0
-function! TermToggle(height)
-  if win_gotoid(g:term_win)
-    hide
-  else
-    botright new
-    exec "resize " . a:height
-    try
-      exec "buffer " . g:term_buf
-    catch
-      call termopen($SHELL, {"detach": 0})
-      let g:term_buf = bufnr("")
-      set nonumber
-      set norelativenumber
-      set signcolumn=no
-    endtry
-    startinsert!
-    let g:term_win = win_getid()
-  endif
-endfunction
 
 " Coc show documentation
 function! s:show_documentation()
@@ -99,10 +88,6 @@ let mapleader = ","
 " Allow pressing <esc> in terminal mode
 tnoremap <C-w> <C-\><C-n><C-w>
 
-" Toggle terminal on/off (neovim)
-"nnoremap <S-t> :call TermToggle(12)<CR>
-"inoremap <S-t> <Esc>:call TermToggle(12)<CR>
-"tnoremap <S-t> <C-\><C-n>:call TermToggle(12)<CR>
 
 "Shift + Left/Right to switch buffers
 map <S-LEFT> :bp<cr>
@@ -124,12 +109,9 @@ noremap <C-l> 1goN<space>
 set backspace=eol,start,indent
 set whichwrap+=<,>,h,l
 
-" Bind undo and redo
+" Bind undo
 nnoremap <C-Z> u
-" nnoremap <C-X> <C-R>
-
 inoremap <C-Z> <C-O>u
-"inoremap <C-X> <C-O><C-R>
 
 " Enable mouse support
 set mouse=a
@@ -137,16 +119,12 @@ set mouse=a
 " zz to save current buffer
 map zz :w! <CR>
 
-" Leader + , to close current buffer without closing window
+" Leader + q to close current buffer without closing window
 map <leader>q :bp<bar>sp<bar>bn<bar>bd<CR>
 
 " Bind copying and pasting to and from clipboard
 vnoremap  <leader>y  "+y
 nnoremap <leader>p "+p
-
-"" Use black hole register line deletion
-"nnoremap dr "_d
-"vnoremap dr "_d
 
 " Replace highlighted text with default register
 " without yanking it
@@ -177,21 +155,12 @@ set mat=2
 " Enable Syntax highlighting
 syntax on
 
-set ai "Auto indent
-" set si "Smart indent
-set wrap "Wrap lines
-
-
-"===========================================
-"===== Searching
-" Highlight all searches
-set hlsearch
-
-" When searching try to be smart about cases
-set smartcase
-
-" Makes search act like search in modern browsers
-set incsearch
+"Auto indent
+set ai
+"Smart indent
+"set si
+"Wrap lines
+set wrap
 
 
 "===========================================
@@ -213,9 +182,6 @@ Plug 'terryma/vim-multiple-cursors'
 " Themes
 Plug 'liuchengxu/space-vim-dark'
 
-" Text allignment on delimiters
-Plug 'godlygeek/tabular'
-
 " Status Bar
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -233,25 +199,13 @@ Plug 'airblade/vim-gitgutter'
 Plug 'scrooloose/nerdtree'
 Plug 'terrahop/nerdtree-git-plugin'
 
-" Toml Support
-Plug 'cespare/vim-toml'
-
 " Git Support
 Plug 'tpope/vim-fugitive'
 
 " Rust Support
 Plug 'rust-lang/rust.vim'
 
-" LanguageClient
-"Plug 'autozimu/LanguageClient-neovim', {
-"      \ 'branch': 'next',
-"      \ 'do': 'bash install.sh',
-"      \ }
-
-" Language server suggestions
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-
-" Use release branch (Recommend)
+" Coc - Use release branch (Recommended)
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Multi-entry selection UI.
@@ -275,11 +229,6 @@ call plug#end()
 
 
 "===========================================
-"===== Tagbar plguin
-nmap <F8> :TagbarToggle<CR>
-
-
-"===========================================
 "===== Colors and Themes
 " Enable theme
 colorscheme space-vim-dark
@@ -295,28 +244,46 @@ hi SignColumn ctermbg=NONE guibg=NONE
 " Enable italics in comments
 hi Comment cterm=italic
 
-" Rainbow Parenthesis
-let g:rainbow_active = 1 "set to 0 if you want to enable it later via :RainbowToggle
+" Enable Rainbow Parenthesis
+let g:rainbow_active = 1
 
 " Column ruler
 set colorcolumn=80,120
 
 
 "===========================================
+"===== Tagbar plguin
+nmap <F8> :TagbarToggle<CR>
+
+
+"===========================================
 "===== Language Support - Using Coc
 
-" Set update time
-set updatetime=300
-
-" Always show signcolumns
-set signcolumn=yes
-
-" Suppress the annoying 'match x of y', 'The only match' and 'Pattern not
-" found' messages
+" Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+"" Functions
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+""
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -326,50 +293,82 @@ inoremap <silent><expr> <TAB>
       \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
+" Use <cr> to confirm completion
 inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>af  <Plug>(coc-fix-current)
 
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR
 
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Use Shift+F to format current buffer
-nmap F :call CocAction('format')<CR>
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-
-" Remap for rename current word
+" Symbol renaming
 nmap <leader>rn <Plug>(coc-rename)
 
-" Use <TAB> for select selections ranges, needs server support, like: coc-tsserver, coc-python
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current line.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>f  <Plug>(coc-fix-current)
+
+" Introduce function text object
+" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xmap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap if <Plug>(coc-funcobj-i)
+omap af <Plug>(coc-funcobj-a)
+
+" Use <TAB> for selections ranges.
+" NOTE: Requires 'textDocument/selectionRange' support from the language server.
+" coc-tsserver, coc-python are the examples of servers that support it.
 nmap <silent> <TAB> <Plug>(coc-range-select)
 xmap <silent> <TAB> <Plug>(coc-range-select)
 
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
+" Use Shift+F to format current buffer
+nmap F :call CocAction('format')<CR>
+
+" Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support.
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline.
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings using CoCList:
+" Show all diagnostics.
+nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions.
+nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" Show commands.
+nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document.
+nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols.
+nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" Do default action for next item.
+nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" Do default action for previous item.
+nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+" Resume latest coc list.
+nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 
 " Coc Extension: coc-actions
 " Remap for do codeAction of selected region
@@ -383,6 +382,10 @@ nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<C
 if has('nvim')
   autocmd BufRead Cargo.toml call crates#toggle()
 endif
+
+" Coc Extension: coc-yank
+" Map yank list open
+nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
 
 
 "===========================================
