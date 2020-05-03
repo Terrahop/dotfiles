@@ -14,4 +14,4 @@
 
 style="blurry_full"
 
-rofi -no-lazy-grab -show drun -theme $HOME/.config/rofi/app_launcher/"$style".rasi
+rofi -no-lazy-grab -show drun -theme $HOME/.config/rofi/themes/$style.rasi

@@ -15,3 +15,4 @@ rofi.yoffset:                 0
 rofi.ssh-command:             {terminal} -e "{ssh-client} {host}"
 rofi.fullscreen:              false
 rofi.blur-background:         true
+rofi.opacity:                 10%

@@ -35,6 +35,7 @@ CLIPBOARD_MODE=xclip
 ENTER_CMD=copy_password
 
 # Keyboard shortcuts
+#
 KB_SYNC="Alt+r"
 KB_URLSEARCH="Alt+u"
 KB_NAMESEARCH="Alt+n"
@@ -56,7 +57,7 @@ ROFI_OPTIONS=()
 DEDUP_MARK="(+)"
 
 # Location of the theme file to use
-ROFI_THEME=$HOME/.config/rofi/scripts/scripts-theme.rasi
+ROFI_THEME=$HOME/.config/rofi/themes/flat-purple.rasi
 
 # Location of the file where login names will be stored for the auto matching
 # of logins. This is mostly for matching browser tabs, it depends on the names of
@@ -118,7 +119,9 @@ check_active_window() {
 }
 
 ask_password() {
-  mpw=$(printf '' | rofi -dmenu -p "Master Password" -password -lines 0) \
+  mpw=$(printf '' | rofi -dmenu -p "Master Password" \
+    -theme $ROFI_THEME \
+    -password -lines 0) \
     || exit $?
 
   echo "$mpw" | bw unlock 2>/dev/null \
@@ -156,7 +159,7 @@ exit_error() {
   local code="$1"
   local message="$2"
 
-  rofi -e "$message"
+  rofi -theme $ROFI_THEME -e "$message"
   exit "$code"
 }
 
@@ -174,11 +177,11 @@ rofi_menu() {
   )
 
   msg="<b>$KB_SYNC</b>: sync \
-    | <b>$KB_URLSEARCH</b>: urls \
-    | <b>$KB_NAMESEARCH</b>: names \
-    | <b>$KB_FOLDERSELECT</b>: folders \
-    | <b>$KB_TOTPCOPY</b>: totp \
-    | <b>$KB_LOCK</b>: lock"
+| <b>$KB_URLSEARCH</b>: urls \
+| <b>$KB_NAMESEARCH</b>: names \
+| <b>$KB_FOLDERSELECT</b>: folders \
+| <b>$KB_TOTPCOPY</b>: totp \
+| <b>$KB_LOCK</b>: lock"
 
   [[ ! -z "$AUTOTYPE_MODE" ]] && {
     actions+=(
@@ -187,13 +190,13 @@ rofi_menu() {
       -kb-custom-7 $KB_TYPEPASS
     )
     msg+=" <b>$KB_TYPEALL</b>: Type all \
-      | <b>$KB_TYPEUSER</b>: Type user \
-      | <b>$KB_TYPEPASS</b>: Type pass"
+| <b>$KB_TYPEUSER</b>: Type user \
+| <b>$KB_TYPEPASS</b>: Type pass"
   }
 
   check_active_window
 
-  rofi -dmenu -p 'Name' \
+  rofi -dmenu -p 'Name:' \
     -theme "$ROFI_THEME" \
     -filter "$ROFI_FILTER" \
     -i -no-custom \
@@ -254,6 +257,7 @@ show_folders() {
 
 # Sync local Bitwarden storage with server
 sync_bitwarden() {
+  show_notification "Syncing Bitwarden"
   bw --session "$SESSION_TOKEN" sync &>/dev/null \
     || exit_error 1 "Failed to sync bitwarden"
 
@@ -406,13 +410,21 @@ show_notification() {
   notify-send -u normal -a "$title" "$body"
 }
 
+# Test if a command exists
+# $1: command
+# $1: command name
+check() {
+  command -v $1 > /dev/null 2>&1 ||
+    { exit_error 1 "'$2' not found, Please install it."; exit 1;  }
+}
+
 # Ensure there is an entry names tmp file
 [ ! -f "$ENTRY_NAMES_DIR" ] && touch $ENTRY_NAMES_DIR && chmod a-rwx,u+rw $ENTRY_NAMES_DIR
 
-# Ensure requirements are met
-[ ! -f "/usr/bin/bw" ] && exit_error 1 "Bitwarden CLI not found, Please install it."
-[ ! -f "/usr/bin/keyctl" ] && exit_error 1 "keyctl not found, Please install keyutils."
-[ ! -f "/usr/bin/$CLIPBOARD_MODE" ] && exit_error 1 "$CLIPBOARD_MODE not found. Please install it."
+# Test requirements
+check bw "Bitwarden CLI"
+check keyctl "Keyutils"
+check $CLIPBOARD_MODE "$CLIPBOARD_MODE"
 
 get_session_key
 load_items
