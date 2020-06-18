@@ -1,5 +1,6 @@
-*
+/*
 
+!.gitignore
 !.config/cmus/autosave
 !.config/cmus/cmus_update_songs.sh
 
