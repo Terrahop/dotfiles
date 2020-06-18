@@ -1,0 +1,17 @@
+## Load Antigen ##
+export ADOTDIR=$HOME/.shell/antigen
+export ANTIGEN_LOCK=$HOME/.shell/antigen
+
+## Load antigen ##
+source $HOME/.shell/antigen.zsh
+
+## Load oh-my-zsh ##
+antigen use oh-my-zsh
+
+## Load Antigen Bundles ##
+antigen bundle git
+antigen bundle 256color
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen theme romkatv/powerlevel10k
+antigen apply
