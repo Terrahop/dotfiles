@@ -1,16 +1,15 @@
-coc-sh
-
-coc-rust-analyzer
-
-coc-json
-
-coc-markdownlint
-
+# Util
 coc-highlight
 coc-actions
 coc-snippets
+coc-yank
+coc-spell-checker
 
-coc-css
-coc-html
+# Languages
+coc-sh
+coc-rust-analyzer
+coc-json
+coc-markdownlint
 coc-tsserver
+coc-prettier
 coc-eslint

@@ -6,7 +6,7 @@
 
 # Requirements
 # i3: i3-gaps-rounded-git (AUR)
-# Lock Screen: dm-tool
+# Lock Screen: i3-lock
 # App Launcher: rofi + rofi-calc
 # Screenshots: scrot
 # Terminal: kitty
@@ -211,7 +211,7 @@ bindsym $mod+Shift+minus move container to workspace $ws11; workspace $ws11
 bindsym $mod+Shift+grave move container to workspace $ws0; workspace $ws0
 
 ## Switch to workspace with urgent window automatically ##
-for_window [urgent=latest] focus
+# for_window [urgent=latest] focus
 
 ## Workspace back and forth (with/without active container) ##
 workspace_auto_back_and_forth yes
@@ -267,8 +267,8 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
 
 ## Lock screen ##
-#bindsym $mod+Shift+l exec ~/.config/i3/scripts/lock.sh
-bindsym $mod+Shift+l exec dm-tool switch-to-greeter
+bindsym $mod+Shift+l exec ~/.config/i3/scripts/lock.sh
+#bindsym $mod+Shift+l exec dm-tool switch-to-greeter
 
 ## Setup workspace layouts ##
 # Workspace 10 terminals
@@ -337,7 +337,7 @@ exec --no-startup-id pkill blueman; sleep 1; blueman-applet; blueman-tray
 exec --no-startup-id pkill nm-applet; sleep 1; nm-applet
 
 ## Dunst notifications
-exec --no-startup-id deadd-notification-center
+exec --no-startup-id dunst
 
 ## Kde-Connect
 exec --no-startup-id kdeconnect-indicator
@@ -371,18 +371,18 @@ exec_always --no-startup-id nitrogen --head=2 --set-scaled ~/.config/i3/wall; sl
 ##########################################################
 
 ##### Borders #####
-hide_edge_borders both
+hide_edge_borders none
 
 ## Rounded Corners ##
-border_radius 10
+border_radius 15
 
 ## Disable title bar ##
 # new_window pixel
 # new_float normal
 #for_window [class="^.*"] border pixel 10
 for_window [class="^.*"] border pixel 0
-for_window [class="kitty"] border pixel 10
-for_window [class="firefox"] border pixel 5
+for_window [class="kitty"] border pixel 1
+for_window [class="firefox"] border pixel 1
 
 ## Disable system stats windows borders
 #for_window [instance="htop-container"] border pixel 0
@@ -396,20 +396,14 @@ for_window [class="firefox"] border pixel 5
 #bindsym $mod+y border pixel 2
 #bindsym $mod+n border normal
 
+
 ## Border Theme ##
-# <colorclass> <border> <background> <text> <indicator> <child_border>
-#client.focused #ac25ea #ac25ea #ac25ea #ac25ea
-#client.focused_inactive #181818 #181818 #2c2e2f
-#client.unfocused #ea25c6 #ea25c6 #ea25c6 #ea25c6
-#client.urgent #383a3b #00ccff #ee0000
-#client.placeholder #bfbfbf #162025 #bfbfbf #75404b #75404b
-client.background #162025
+#                       <border> <background> <text> <indicator> <child_border>
+client.background       #162025
 client.focused          #000000 #000000 #000000 #000000 #000000
 client.focused_inactive #000000 #000000 #000000 #000000 #000000
 client.unfocused        #000000 #000000 #000000 #000000 #000000
 client.urgent           #2f343a #900000 #ffffff #900000 #900000
-client.placeholder      #000000 #0c0c0c #ffffff #000000 #0c0c0c
-
 ##### Gaps #####
 
 ## Smart Gaps ##
@@ -426,7 +420,6 @@ gaps inner 10
 #workspace $ws10 gaps inner 5
 workspace $ws0 gaps inner 0
 workspace $ws0 gaps outer 0
-
 
 # Top and Bottom Gaps
 #workspace $ws10 gaps top 0

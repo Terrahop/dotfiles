@@ -10,6 +10,8 @@
 # Download: youtube-dl, parallel
 # Parser: jq
 # GUI: rofi(optional)
+#
+# TODO: add video downloading and muxing as an additional argument
 
 #########################
 # Vars
@@ -19,7 +21,7 @@
 DOWNLOAD_DIR=$HOME/Downloads/music_downloads
 
 # Set parallel temp directory
-PARALLEL_HOME=$HOME/.config/parallel
+export PARALLEL_HOME=$HOME/.cache/parallel
 
 # Theme for rofi is being used
 ROFI_THEME=$HOME/.config/rofi/themes/flat-purple.rasi
@@ -35,13 +37,13 @@ fi
 
 
 #########################
-# functions
+# Functions
 #########################
 
 # Helper: Test if a command exists
 check() {
   command -v $1 > /dev/null 2>&1 ||
-    { exit_error 1 "'$2' not found, Please install it."; exit 1;  }
+    { echo "'$1' not found, Please install it."; exit 1;  }
 }
 
 # Setup
@@ -71,7 +73,6 @@ download_single () {
 # $1: Space seperated string of urls
 download_playlist () {
   for item in $1; do
-    notify-send "line: $item"
     sem -j +0 "
       youtube-dl -x --no-playlist --ignore-errors \
         -f 'bestaudio[ext=flac]/bestaudio[ext=webm]/bestaudio' --audio-quality 0 \
@@ -100,7 +101,6 @@ case $URL in
   *youtu*list*)
     tmp_file=$(date +%F_%T-urls.txt)
     URLS=$(youtube-dl -j --flat-playlist "$URL" | jq -r '"https://youtu.be/"+ .url')
-    notify-send "urls: $URLS"
     download_playlist "$URLS"
     ;;
   *bandcamp*album*)

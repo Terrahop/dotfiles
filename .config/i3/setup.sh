@@ -31,11 +31,11 @@ export DP_RES=$(xrandr --query | egrep -E "DP.*\sconnected" | awk '{print $3}')
 
 # If the external HDMI monitor has been set to primary, output of HDMI_RES will be
 # "primary" so fix that.
-[ $HDMI_RES == "primary" ] && export HDMI_RES=$(xrandr --query | egrep -E "HDMI.*\sconnected" | awk '{print $4}')
+[ "$HDMI_RES" == "primary" ] && export HDMI_RES=$(xrandr --query | egrep -E "HDMI.*\sconnected" | awk '{print $4}')
 
 # If the external DP monitor has been set to primary, output of DP_RES will be
 # "primary" so fix that.
-[ $DP_RES == "primary" ] && export DP_RES=$(xrandr --query | egrep -E "HDMI.*\sconnected" | awk '{print $4}')
+[ "$DP_RES" == "primary" ] && export DP_RES=$(xrandr --query | egrep -E "HDMI.*\sconnected" | awk '{print $4}')
 
 # If hdmi doesnt exist set hdmi xrdb value to laptop display
 if [ -z "$MONITOR_HDMI" ]; then

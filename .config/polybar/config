@@ -5,7 +5,7 @@
 [colors]
 ##### Manual #####
 #background = #15131E
-background = #9C000000
+background = #cf000000
 background-alt = #444
 foreground = #962d4c
 foreground-alt = #555

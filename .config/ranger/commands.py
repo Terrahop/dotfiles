@@ -16,7 +16,7 @@ class fzf_select(Command):
         import subprocess
         import os.path
         # match files and directories
-        command="fd -L -H -a -d 6 . | sed 1d | fzf +m"
+        command="fd -L -H -a -d 6 . | fzf +m"
         fzf = self.fm.execute_command(command, universal_newlines=True, stdout=subprocess.PIPE)
         stdout, stderr = fzf.communicate()
         if fzf.returncode == 0:

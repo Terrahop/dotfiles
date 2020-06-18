@@ -8,8 +8,15 @@ URL=$(rofi -theme $THEME -threads 0 -lines 10 -width 50 -location 0 -dmenu -i -p
 
 RAW_RES=$(youtube-dl -F $URL)
 
-VIDEO_FORMATS=$(echo "$RAW_RES" | tail -n +4)
+FORMATS=$(echo "$RAW_RES" | tail -n +4)
 
 HEADERS=$(echo "$RAW_RES" | sed '3q;d')
 
-echo "$VIDEO_FORMATS" | rofi -dmenu -p " Format:" -theme "$THEME" -width "60%" -i -mesg "$HEADERS"
+FORMAT=$(echo "$FORMATS" | \
+  rofi -dmenu -p " Format:" \
+  -theme "$THEME" -width "60%" \
+  -i -mesg "$HEADERS")
+
+FORMAT_CODE=$(echo $FORMAT | awk '{print $1}')
+
+youtube-dl -f $FORMAT_CODE -o "$HOME/Media/Videos/Youtube/%(title)s.%(ext)s" $URL

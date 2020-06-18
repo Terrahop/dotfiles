@@ -1,6 +1,13 @@
 #!/bin/bash
-# Rofi extension for BitWarden-cli
-# Requires: keyutils
+
+# Rofi Bitwarden
+#
+# Bitwarden management through rofi
+#
+# Requirements
+# Session: keyutils
+# CLI: bw
+# Clipboard: either xclip, xsel, or wl-clipboard
 #
 # Original by mattydebie: https://github.com/mattydebie/bitwarden-rofi
 
@@ -9,7 +16,7 @@ SESSION_TOKEN=
 
 # Options
 CLEAR=7 # Clear password from clipboard after N seconds (0 to disable)
-AUTO_LOCK=900 # Automatically purge the session token after N seconds
+AUTO_LOCK=3600 # Automatically purge the session token after N seconds
 
 # Holds the available items in memory
 ITEMS=
@@ -32,10 +39,9 @@ CLIPBOARD_MODE=xclip
 # 'copy_password'
 # 'auto_type all'
 # 'auto_type password'
-ENTER_CMD=copy_password
+ENTER_CMD='auto_type all'
 
 # Keyboard shortcuts
-#
 KB_SYNC="Alt+r"
 KB_URLSEARCH="Alt+u"
 KB_NAMESEARCH="Alt+n"
@@ -65,27 +71,15 @@ ROFI_THEME=$HOME/.config/rofi/themes/flat-purple.rasi
 # won't always work.
 ENTRY_NAMES_DIR=/tmp/bw_names
 
-# Source helper functions
-#DIR="$(dirname "$(readlink -f "$0")")"
-#source "$DIR/lib-bwmenu"
-
 # Extract item or items matching .name, including deduplication
+#
 # $1: item name, prepended or not with deduplication mark
 array_from_name() {
   item_name="$(echo "$1" | sed "s/$DEDUP_MARK //")"
   echo "$ITEMS" | jq -r ". | map(select((.name == \"$item_name\") and (.type == $TYPE_LOGIN)))"
 }
 
-# Pipe a document and deduplicate lines.
-# Mark those duplicated by prepending $DEDUP_MARK
-dedup_lines() {
-  sort | uniq -c \
-  | sed "s/^\s*1 //" \
-  | sed -r "s/^\s*[0-9]+ /$DEDUP_MARK /"
-}
-
 check_active_window() {
-
   # Populate the entry names file if it's empty
   if [ ! -s $ENTRY_NAMES_DIR ]; then
     bw --session "$SESSION_TOKEN" list items --pretty \
@@ -95,15 +89,17 @@ check_active_window() {
       | awk '{$1=$1};1' > $ENTRY_NAMES_DIR
   fi
 
-  # Get the name of the current active window
+  # Get the name of the currently focused window
   CURRENT_WINDOW="$(xprop -id \
     $(xprop -root 32x '\t$0' \
     _NET_ACTIVE_WINDOW | cut -f 2 \
-    ) _NET_WM_NAME | cut -d "=" -f 2 \
+    ) WM_NAME | cut -d "=" -f 2 \
     )"
 
   ENTRIES=$(cat $ENTRY_NAMES_DIR)
 
+  # Do some basic fuzzy matching for item names and focesed windows
+  # WILL NOT ALWAYS WORK
   shopt -s nocasematch
   while IFS= read -r entry; do
     for word in $entry; do
@@ -114,22 +110,23 @@ check_active_window() {
     done
     [ ! -z "$ROFI_FILTER" ] && break
   done <<< "$ENTRIES"
-
   shopt -u nocasematch
 }
 
+# Open a rofi window for password input
+#
+# Returns: session token string
 ask_password() {
   mpw=$(printf '' | rofi -dmenu -p "Master Password" \
     -theme $ROFI_THEME \
     -password -lines 0) \
     || exit $?
 
-  echo "$mpw" | bw unlock 2>/dev/null \
-    | grep 'export' \
-    | sed -E 's/.*export BW_SESSION="(.*==)"$/\1/' \
+  echo "$mpw" | bw unlock --raw 2>/dev/null \
     || exit_error $? "Could not unlock vault"
 }
 
+# Request session token from keyctl
 get_session_key() {
   if [ $AUTO_LOCK -eq 0 ]; then
     keyctl purge user bw_session &>/dev/null
@@ -155,6 +152,7 @@ load_items() {
   fi
 }
 
+# Open a rofi window for exit errors
 exit_error() {
   local code="$1"
   local message="$2"
@@ -210,7 +208,6 @@ show_items() {
   if item=$(
     echo "$ITEMS" \
     | jq -r ".[] | select( has( \"login\" ) ) | \"\\(.name)\"" \
-    | dedup_lines \
     | rofi_menu
   ); then
     item_array="$(array_from_name "$item")"
@@ -257,7 +254,7 @@ show_folders() {
 
 # Sync local Bitwarden storage with server
 sync_bitwarden() {
-  show_notification "Syncing Bitwarden"
+  notify "Syncing"
   bw --session "$SESSION_TOKEN" sync &>/dev/null \
     || exit_error 1 "Failed to sync bitwarden"
 
@@ -267,6 +264,8 @@ sync_bitwarden() {
     | cut -d ":" -f 2 \
     | tr -cd 'a-zA-Z\n ' \
     | awk '{$1=$1};1' > $ENTRY_NAMES_DIR
+
+  notify "Synced!"
 
   load_items
   show_items
@@ -300,6 +299,7 @@ auto_type() {
       type_word "$(echo "$2" | jq -r '.[0].login.username')"
       type_tab
       type_word "$(echo "$2" | jq -r '.[0].login.password')"
+      type_tab
       copy_to_clipboard "totp" "$2"
       ;;
     "username")
@@ -320,6 +320,11 @@ type_word() {
 # Emulate tab press
 type_tab() {
   "${AUTOTYPE_MODE[@]}" key Tab
+}
+
+# Emulate enter press
+type_enter() {
+  "${AUTOTYPE_MODE[@]}" key Return
 }
 
 clipboard_set() {
@@ -373,7 +378,7 @@ copy_to_clipboard() {
     "pass")
       pass="$(echo "$2" | jq -r '.[0].login.password')"
       echo -n "$pass" | clipboard_set
-      show_notification "Password Copied!"
+      notify "Password Copied!"
       if [[ $CLEAR -gt 0 ]]; then
         sleep "$CLEAR"
         if [[ "$(clipboard_get)" == "$pass" ]]; then
@@ -386,10 +391,10 @@ copy_to_clipboard() {
       id=$(echo "$2" | jq -r ".[0].id")
       if ! totp=$(bw --session "$SESSION_TOKEN" get totp "$id"); then
         #exit_error 1 "Error: This item does not have a totp"
-        show_notification "No TOTP for this login"
+        notify "No TOTP for this login"
       else
         echo -n "$totp" | clipboard_set
-        show_notification "TOTP Copied"
+        notify "TOTP Copied"
       fi
       ;;
 
@@ -403,19 +408,19 @@ lock_vault() {
 
 # Show context specific notification
 # $1: The message of the notification
-show_notification() {
+notify() {
   local title="Bitwarden Rofi"
   local body="$1"
 
-  notify-send -u normal -a "$title" "$body"
+  notify-send -t 1000 -u normal -a "$title" "$body"
 }
 
 # Test if a command exists
 # $1: command
-# $1: command name
+# $2: friendly command name
 check() {
   command -v $1 > /dev/null 2>&1 ||
-    { exit_error 1 "'$2' not found, Please install it."; exit 1;  }
+    { exit_error 1 "'$2' not found, Please install it."; }
 }
 
 # Ensure there is an entry names tmp file

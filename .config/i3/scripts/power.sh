@@ -2,12 +2,11 @@
 
 # Power Management
 #
-# Manage system power mode. Controlling cpu power state, msi fan curves and
-# and intel speedboost.
+# Manage system power mode. Controlling intel cpu power state, msi fan curves
+# and and intel speedboost.
 #
 # Requirements
 # Fan Control: isw
-#
 
 #########################
 # Vars
@@ -22,19 +21,8 @@ ISW_B_PROFILE="16Q2EMS12"
 
 
 ##########################
-# functions
+# Functions
 #########################
-
-function performance_toggles() {
-  # Reduce vm writeback time
-  echo '6000' > sudo tee /proc/sys/vm/dirty_writeback_centisecs
-
-  # Disable NMI Watchdog
-  echo '0' > sudo tee /proc/sys/kernel/nmi_watchdog
-
-  # Enable Audio powersaving
-  echo '1' > sudo tee /sys/module/snd_hda_intel/parameters/power_save
-}
 
 function to_powersave() {
   # Set fan profile
@@ -48,8 +36,6 @@ function to_powersave() {
 
   # Disable turbo boost
   echo "1" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
-
-  echo "powersave" > $POWER_PATH
 }
 
 function to_performance() {
@@ -65,8 +51,6 @@ function to_performance() {
 
   # Enable turbo boost
   echo '0' | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
-
-  echo "powersave" > $POWER_PATH
 }
 
 function to_balanced() {
@@ -81,8 +65,6 @@ function to_balanced() {
 
   # Enable turbo boost
   echo "0" | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
-
-  echo "balanced" > $POWER_PATH
 }
 
 
@@ -91,9 +73,6 @@ function to_balanced() {
 #########################
 
 case "$1" in
-  "toggle")
-    power_toggle
-    ;;
   "powersave")
     to_powersave
     ;;

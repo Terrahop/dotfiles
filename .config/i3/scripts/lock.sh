@@ -1,3 +1,12 @@
+#!/bin/bash
+
+# Lock
+#
+# Lock using i3lock
+#
+# Requirements
+# i3lock-color
+
 B='#00000000'  # blank
 C='#ffffff22'  # clear ish
 D='#ff00ffcc'  # default
@@ -28,8 +37,8 @@ i3lock \
   --linecolor=$B        \
   --separatorcolor=$D   \
   \
-  --verifcolor=$T        \
-  --wrongcolor=$T        \
+  --verifcolor=$T       \
+  --wrongcolor=$T       \
   --timecolor=$T        \
   --datecolor=$T        \
   --layoutcolor=$T      \
