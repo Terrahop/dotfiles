@@ -17,6 +17,12 @@ set -gx XDG_CONFIG_HOME "$HOME/.config"
 ## Remove greeting
 set fish_greeting
 
+## w3m
+set -gx WWW_HOME "$HOME/.config/w3m"
+
+## Emacs doom
+set -gx DOOMDIR "$HOME/.config/doom.d"
+
 ## Rust
 set -gx CARGO_HOME "$HOME/.config/cargo/"
 set -gx RUSTUP_HOME "$HOME/.config/rustup/"
@@ -47,16 +53,14 @@ set fish_complete_path $fish_complete_path[1] $fisher_path/completions $fish_com
 
 # Install fisher if it doesn't exist
 if not functions -q fisher
-    set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
-    curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
-    fish -c fisher
+  set -q XDG_CONFIG_HOME; or set XDG_CONFIG_HOME ~/.config
+  curl https://git.io/fisher --create-dirs -sLo $XDG_CONFIG_HOME/fish/functions/fisher.fish
+  fish -c fisher
 
-    # Install each package in the fish file
-    for package in $HOME/.config/fish/fishfile
-      fisher add package
-    end
-else
-  fish_ssh_agent
+  # Install each package in the fish file
+  for package in $HOME/.config/fish/fishfile
+    fisher add package
+  end
 end
 
 # Load fisher files
