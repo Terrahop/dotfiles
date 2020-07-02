@@ -12,7 +12,7 @@ else
   LAPTOP_POS="0x0"
 fi
 
-xrandr --output $MONITOR_EDP --primary --refresh 144 --mode 1920x1080  \
+xrandr --output $MONITOR_EDP --primary --refresh 144 --mode 1920x1080 \
   --pos $LAPTOP_POS \
   --output $MONITOR_DP --mode ${1%%+*} --pos $DP_POS --auto
 
