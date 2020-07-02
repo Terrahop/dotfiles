@@ -11,9 +11,8 @@ else
   DP_POS="1920x0"
   LAPTOP_POS="0x0"
 fi
-xrandr --output $MONITOR_EDP --primary --mode 1920x1080 --dpi 100 --pos $LAPTOP_POS --rotate normal --rate 60.08 --output $MONITOR_DP --mode ${1%%+*} --dpi 100 --pos $DP_POS --rotate normal --output DP-0 --off --output DP-1 --off
 
-sleep 1
+xrandr --output $MONITOR_EDP --primary --refresh 144 --mode 1920x1080  \
+  --pos $LAPTOP_POS \
+  --output $MONITOR_DP --mode ${1%%+*} --pos $DP_POS --auto
 
-# Re-apply 144hz
-xrandr --output $MONITOR_EDP --mode 1920x1080 --rate 144.03 --dpi 100

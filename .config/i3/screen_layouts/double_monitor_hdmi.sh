@@ -12,9 +12,7 @@ else
   LAPTOP_POS="0x0"
 fi
 
-xrandr --output $MONITOR_EDP --primary --mode 1920x1080 --dpi 100 --pos $LAPTOP_POS --rotate normal --rate 60.08 --output $MONITOR_HDMI --mode ${1%%+*} --dpi 100 --pos $HDMI_POS --rotate normal --output DP-0 --off --output DP-1 --off
+xrandr --output $MONITOR_EDP --primary --refresh 144 --mode 1920x1080 \
+  --pos $LAPTOP_POS \
+  --output $MONITOR_HDMI --mode ${1%%+*} --pos $HDMI_POS --auto
 
-sleep 1
-
-# Apply 144hz
-xrandr --output $MONITOR_EDP --mode 1920x1080 --rate 144.03 --dpi 100
