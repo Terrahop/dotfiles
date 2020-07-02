@@ -7,28 +7,33 @@ colorscheme space-vim-dark
 " Set terminal gui colors(truecolor support)
 set termguicolors
 
+" Enable italics in comments
+hi Comment cterm=italic
+
 " Set custom colors
 hi Normal       ctermbg=NONE guibg=NONE
 hi LineNr       ctermbg=NONE guibg=NONE
 hi SignColumn   ctermbg=NONE guibg=NONE
 hi ColorColumn  ctermbg=NONE guibg=#2e2e2e
 
-" Enable italics in comments
-hi Comment cterm=italic
+" Tabline colors
+hi TablineSel   guifg=#ffffff guibg=#825BA8
+hi PmenuSel     guifg=#ffffff guibg=#825BA8
+hi Tabline      guifg=#ffffff guibg=#211F26
+hi TablineFill  guibg=#000000
 
-" Column ruler
-set colorcolumn=80,120
-
+" Conceal color for showing leading spaces
+hi Conceal guibg=NONE ctermbg=NONE ctermfg=darkgrey guifg=#363636
 
 "===========================================
 "===== Whitespaces
 
-" Show unwanted white spaces
-highlight ExtraWhitespace ctermbg=lightgrey guibg=#4d1582
+" Color to highlight unwanted spaces
+highlight ExtraWhitespace ctermbg=lightgrey guibg=#7c0006
 
-" Don't show whitespaces on the line currently being edited
+" Highlight all unwanted spaces
 match ExtraWhitespace /\s\+$/
-
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+

@@ -1,14 +1,14 @@
-"============================================================
-" Neovim Config
-"
+"===========================================
+"====== Neovim Config
 
+" Configurations to load
 let configs = [
   \  "general",
   \  "ui",
-  \  "functions",
   \  "mappings",
   \  "plugins",
   \  "colors",
+  \  "statusline",
   \  "plugins-settings",
   \ ]
 

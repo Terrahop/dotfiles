@@ -25,11 +25,6 @@ set shortmess+=c
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Add (Neo)Vim's native statusline support.
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline.
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -99,12 +94,6 @@ nnoremap <silent> <leader>cr  :<C-u>CocListResume<CR>
 " Requires: vim-multiple-cursors
 "nmap <silent> <C-d> <Plug>(coc-cursors-word)
 
-" Display rust crate versions in toml files
-" Requires: vim-crates
-if has('nvim')
-  autocmd BufRead Cargo.toml call crates#toggle()
-endif
-
 " Open a list of yanked text
 " Coc Extension: coc-yank
 nnoremap <silent> <space>y  :<C-u>CocList -A --normal yank<cr>
@@ -119,52 +108,34 @@ nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<C
 
 
 "===========================================
-"===== Tagbar plugin
+"===== Vim Crates
 
+" Display rust crate versions in toml files
+" Requires: vim-crates
+if has('nvim')
+  autocmd BufRead Cargo.toml call crates#toggle()
+endif
+
+
+"===========================================
+"===== Tagbar
+
+" Toggle tab bar
 nmap <leader>tt :TagbarToggle<CR>
 
 
 "===========================================
-"===== Fzf
+"===== Buftabline
+
+" Only show buffer tabs if there are at least 2 buffers
+let g:buftabline_show = 1
+
+" Show whether a buffer is modified
+let g:buftabline_indicators = 1
 
 
 "===========================================
-"===== Indent Line Plugin
-
-" Vim
-" let g:indentLine_setColors = 1
-let g:indentLine_color_term = 239
-
-" none X terminal
-let g:indentLine_color_tty_light = 7 " (default: 4)
-let g:indentLine_color_dark = 1 " (default: 2)
-
-" Show leading spaces
-let g:indentLine_leadingSpaceEnabled = 1
-let g:indentLine_leadingSpaceChar = '·'
-let g:indentLine_char_list = ['|', '┆', '┊', '¦']
-
-" Quotes are concealed in Json and it messes with plugins
-" https://github.com/Yggdroot/indentLine/issues/140#issuecomment-357620391
-" To get quotes back in a json file in neovim:
-" 1. Enter NeoVim
-" 2. :e $VIMRUNTIME/syntax/json.vim
-" 3. :g/if has('conceal')/s//& \&\& 0/
-" 4. :wq
-"
-"let g:indentLine_concealcursor=''
-"let g:indentLine_concealcursor='nc'
-
-
-"===========================================
-"===== NERDTree Plugin
-
-" Open NERDTree automatically when vim starts up
-" autocmd vimenter * NERDTree
-
-" Open NERDTree automatically when vim starts with no files
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"===== NERDTree + Git
 
 " Close NERDTree with vim
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -190,9 +161,12 @@ let NERDTreeAutoDeleteBuffer = 1
 " If more than one window and previous buffer was NERDTree, go back to it.
 autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
 
+" Show ignored(git) status
+" Requires: nerdtree-git
 let g:NERDTreeShowIgnoredStatus = 1
 
-" From nerdtree-git-plugin
+" Set custom git glyphs
+" Requires: nerdtree-git
 let g:NERDTreeIndicatorMapCustom = {
   \ "Modified"  : "✹",
   \ "Staged"    : "✚",
@@ -208,7 +182,7 @@ let g:NERDTreeIndicatorMapCustom = {
 
 
 "===========================================
-"===== Git Gutter Plugin
+"===== Git Gutter
 
 " Don't use floating preview
 let g:gitgutter_preview_win_floating = 0
@@ -218,28 +192,7 @@ let g:gitgutter_sign_allow_clobber = 1
 
 
 "===========================================
-"===== Airline Plugin
-
-" Show buffers in tabs
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-
-" Format of file names in buffer tabs
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-
-" Use powerline fonts
-let g:airline_powerline_fonts = 1
-
-" Don't show empty sections
-let g:airline_skip_empty_sections = 1
-
-" Set default theme
-" let g:airline_theme='dark'
-
-
-"===========================================
-"===== vim-closetag Plugin
+"===== Vim Closetag
 
 " These are the file extensions where this plugin is enabled.
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.jsx,*.js'
@@ -256,18 +209,24 @@ let g:closetag_regions = {
   \ 'javascript.jsx': 'jsxRegion',
   \ }
 
-" Shortcut for closing tags, default is '>'
-let g:closetag_shortcut = '>'
 
-" Add > at current position without closing the current tag, default is ''
-" let g:closetag_close_shortcut = '<leader>>'
+"===========================================
+"===== Instant Markdown
+
+" Don't automatically open a window preview
+let g:instant_markdown_autostart = 0
 
 
 "===========================================
 "===== VimWiki
 
-" Change wiki path
-let g:vimwiki_list = [{'path': '~/Documents/wiki',
-  \ 'syntax': 'markdown', 'ext': '.md'}]
+" Setup wiki options
+let g:vimwiki_list = [{
+  \ 'path': '~/Documents/wiki/',
+  \ 'syntax': 'markdown', 'ext': '.md',
+  \ 'auto_diary_index': 1
+  \ }]
 
+" Don't recognize non vim wiki markdown files as vimwiki filetype
+let g:vimwiki_global_ext = 0
 

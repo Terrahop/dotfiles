@@ -7,6 +7,9 @@ syntax on
 " Detect filetypes, load plugins, load indent files
 filetype plugin indent on
 
+" Column ruler
+set colorcolumn=80,120
+
 " Highlight all searches
 set hlsearch
 
@@ -42,15 +45,19 @@ set showmatch
 " How many tenths of a second to blink when matching brackets
 set mat=2
 
-"Enable Auto indent
+" Enable Auto indent
 set ai
 
-"Enable Smart indent
+" Enable Smart indent
 set si
 
-"Wrap lines
+" Wrap lines
 set wrap
 
 " Always show signcolumns
 set signcolumn=yes
+
+" Visualize leading spaces
+autocmd BufRead,BufWinEnter * setlocal conceallevel=2 concealcursor=inc
+autocmd BufRead,BufWinEnter * syn match LeadingSpace /\(^ *\)\@<= / containedin=ALL conceal cchar=·
 

@@ -8,7 +8,6 @@ if empty(glob('~/.config/nvim/autoload/plug.vim'))
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-
 call plug#begin('~/.config/nvim/plugged')
 
 
@@ -17,13 +16,6 @@ Plug 'terryma/vim-multiple-cursors'
 
 " Color theme
 Plug 'liuchengxu/space-vim-dark'
-
-" Status Bar
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-" Visualize indentation levels and leading spaces
-Plug 'yggdroot/indentline'
 
 " File Browser
 Plug 'scrooloose/nerdtree'
@@ -41,13 +33,11 @@ Plug 'rust-lang/rust.vim'
 " Rust Crate version disply in toml
 Plug 'mhinz/vim-crates'
 
-" clippy?
-Plug 'wagnerf42/vim-clippy'
-
-Plug 'dag/vim-fish'
-
 " Coc - Use release branch
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Buffer status line
+Plug 'ap/vim-buftabline'
 
 " Tagbar
 " Requires: ctags
@@ -65,6 +55,9 @@ Plug 'vimwiki/vimwiki'
 " Fzf integration
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+
+" Language Syntax highlighting
+Plug 'sheerun/vim-polyglot'
 
 
 call plug#end()

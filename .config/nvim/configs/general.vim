@@ -11,7 +11,7 @@ set autoread
 set hidden
 
 " Set lines viewable before and after cursor position
-set so=3
+set so=4
 
 " Wildmenu config
 set wildmenu

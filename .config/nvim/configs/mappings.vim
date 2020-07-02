@@ -42,7 +42,7 @@ nnoremap <leader>p "+p
 
 " Replace highlighted text with default register
 " without yanking it
-map <leader>t "_dP
+" map <leader>t "_dP
 
 " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
 inoremap <c-c> <ESC>
